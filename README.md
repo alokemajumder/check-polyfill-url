@@ -24,5 +24,7 @@ By implementing this action, I aim to enhance the security of any project by avo
 
 ---
 
-For any issues or further information, please refer to the original article on the supply chain attack or contact the repository maintainers.
+### Disclaimer
+
+This action script and repository were created for personal use and specific project requirements. Please adapt and use it at your own discretion and responsibility.
 
