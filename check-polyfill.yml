@@ -1,0 +1,59 @@
+
+# Check and Replace polyfill.io URL GitHub Action
+#
+# Author: Aloke Majumder
+# Url: https://github.com/alokemajumder/check-polyfill-url
+# License: MIT
+# Disclaimer
+# This action script was created for personal use and specific project requirements. 
+# Please adapt and use it at your own discretion and responsibility.
+# This GitHub Action script checks for and replaces the polyfill.io URL in 
+# JavaScript project files with the minified version from CDNJS to mitigate 
+# potential security risks from the recent supply chain attack on polyfill.io.
+# Place this yml file as (.github/workflows/check-polyfill.yml)
+
+name: Check and Replace polyfill.io URL
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check_replace_polyfill:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      # Install project dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Search for polyfill.io URLs and replace with CDNJS equivalent
+      - name: Search and replace polyfill.io URL
+        run: |
+          # Replace minified polyfill.io URL
+          grep -rl "https://polyfill.io/v3/polyfill.min.js" . | xargs sed -i 's|https://polyfill.io/v3/polyfill.min.js|https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js|g'
+
+      # Commit and push the changes
+      - name: Commit changes
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add .
+          git commit -m 'Replace polyfill.io URLs with CDNJS equivalents'
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
